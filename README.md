@@ -13,5 +13,7 @@ FYI, Melvin is a Red Teamer on the "Targeted Operations Team" at [TrustedSec](ht
 Based on his ["Checking out Sliver C2"](https://www.youtube.com/watch?v=3R6WKUgN0K4), I deceided to give it try on Kali, and in particular on the setup from my repo [Active Directoy Lab Setup](https://github.com/jjkirn/active-directory).
 
 
-Thank you Melvin for inspiring me create these notes.
+Thank you Melvin for inspiring me create these notes!
 
+## <u>My Notes:</u>
+[Part 1 - Install of Sliver C2 on Kali VM, generate Beacon code, get call back from Windows target](/notes/part1.md)

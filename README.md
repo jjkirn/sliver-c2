@@ -17,3 +17,7 @@ Thank you Melvin for inspiring me create these notes!
 
 ## <u>My Notes:</u>
 [Part 1 - Install of Sliver C2 on Kali VM, generate Beacon code, get call back from Windows target](/notes/part1.md)
+
+[Part 2 - Creating a C+ AV bypass and Silver server and client feature demo](/notes/part2.md)
+
+[Part 3 - Sliver Armory overview - TBD]()

